@@ -65,7 +65,7 @@
       }
       .botText span {
         background-color: #4169e1;
-        padding: 10px;
+        padding: 0px;
         border-radius: 2px;
       }
       #tidbit {
@@ -110,7 +110,7 @@
             .getElementById("userInput")
             .scrollIntoView({ block: "start", behavior: "smooth" });
           $.post("/response", { msg: rawText }).done(function(data) {
-            var botHtml = '<p class="botText"><span>' + data.response + "</span></p>";
+            var botHtml = '<p class="botText"><span>'+$.trim(data.response)+"</span></p>";
             $("#chatbox").append(botHtml);
             document
               .getElementById("userInput")

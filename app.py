@@ -1,6 +1,13 @@
 from flask import Flask, jsonify, redirect, render_template, request, session
+from vendorshop import create_app
+from vendorshop.extensions import db
+from vendorshop.user.models import User
 
+from chatbot import ChatBot
+from constants import PARDON, REQUEST_TO_LOGIN
 from flask_session import Session
+
+create_app().app_context().push()
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -10,25 +17,36 @@ Session(app)
 
 @app.route("/response", methods=["GET", "POST"])
 def response():
-    print(request.json)
-    print(request.form)
+
+    # get the message from user
     msg = request.form.get("msg")
-    if msg.startswith("/login"):
+
+    # if there is an active session then get response
+    # from chatbot
+    if session.get("chatbot") is not None:
+        print("In Chatbot")
+        return jsonify({"response": session.get("chatbot").get_response(msg)})
+    elif msg.startswith("login"):
         username = msg.split(" ")[-1]
-        session["username"] = username
-        return jsonify({"response": f"Welcome {username}"})
+        if username != "":
+            user = User.query.filter(User.username == username.strip()).first()
+            if user is not None:
+                print(f"{username}")
+                session["chatbot"] = ChatBot(user)
+                return jsonify(
+                    {"response": f"Welcome {session.get('chatbot').user.username}"}
+                )
+    else:
+        # request user to login via username
+        return jsonify({"response": REQUEST_TO_LOGIN})
 
-    if msg.startswith("/name"):
-        return jsonify({"response": f"Welcome {session['username']}"})
-
-    return jsonify({"response": f"Pardon!, Can you please ask again?"})
-
-
-@app.route("/")
-def index():
-    return session.get("username", "")
+    # pardon! if input message is not in the context
+    return jsonify({"response": PARDON})
 
 
 @app.route("/chat")
 def chat():
+    """
+    Main chat web page
+    """
     return render_template("home.html")

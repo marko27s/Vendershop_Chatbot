@@ -147,3 +147,4 @@ cython_debug/
 
 # Test files
 test_postgres.py
+test_sql.py

@@ -1,9 +1,10 @@
+import os
 from flask import Flask, jsonify, redirect, render_template, request, session
 from vendorshop import create_app
 from vendorshop.extensions import db
 from vendorshop.user.models import User
 
-from chatbot import ChatBot
+from chatbot.chatbot import ChatBot
 from constants import PARDON, REQUEST_TO_LOGIN
 from flask_session import Session
 

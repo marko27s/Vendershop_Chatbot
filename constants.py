@@ -27,4 +27,5 @@ REQUEST_TO_LOGIN = """
 Please specify your username as following
 login your_user_name
 """
+NO_MORE_ITEMS = 'No more items.'
 PARDON = "Pardon, Can you be more specific?"

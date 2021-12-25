@@ -32,21 +32,13 @@ class ChatBot:
 
             if self.state == SHOP:
                 return self.get_shop_response(option)
-
-        elif message.startswith(HOME.lower()):
-            self.set_state_home()
-            self.last_message = "<br>".join(MAIN_MENU + [SELECT_MESSAGE])
-            return self.last_message
-
-        elif message.startswith(SHOP.lower()):
-            self.state = SHOP
-            return self.get_home_response(2)
-
+        
         elif message.startswith("add"):
             if self.state == PRODUCT_DETAILS:
                 quantity = int(message.split(" ")[-1])
                 self.cart.add_product(self.last_viewed_product, quantity)
                 return PRODUCT_ADDED_TO_CART
+        
         elif message.startswith("remove"):
             pass
 
@@ -64,11 +56,18 @@ class ChatBot:
         if option == 1:
             self.state = HOME
             self.last_message = "<br>".join(MAIN_MENU + [SELECT_MESSAGE])
+
         elif option == 2:
             # return products
             self.page = 1
             self.page, self.last_message = get_products(self.page, "")
             self.state = SHOP
+
+        elif option == 4:
+            # return cart items
+            self.state = CART
+            return self.cart.get_cart_items()
+       
         else:
             return PARDON
 

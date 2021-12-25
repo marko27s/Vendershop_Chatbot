@@ -32,7 +32,7 @@ class ChatBot:
 
             if self.state == SHOP:
                 return self.get_shop_response(option)
-        
+
         elif message.startswith("add"):
             if self.state == PRODUCT_DETAILS:
                 quantity = int(message.split(" ")[-1])
@@ -40,7 +40,10 @@ class ChatBot:
                 return PRODUCT_ADDED_TO_CART
         
         elif message.startswith("remove"):
-            pass
+            if self.state == CART:
+                product_id = int(message.split(" ")[-1])
+                self.cart.remove_product(product_id)
+                return self.cart.get_cart_items()
 
         # pagination input
         elif message.strip() in ["next", "back"]:

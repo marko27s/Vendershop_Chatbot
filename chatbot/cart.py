@@ -27,7 +27,7 @@ class Cart:
     def get_cart_items(self) -> str:
         return "<br>".join(
             [
-                f"{self.items[_id][0]}, ${self.items[_id][2]*self.items[_id][3]}, {self.items[_id][3]}"
+                f"{_id}, {self.items[_id][0]}, ${self.items[_id][2]*self.items[_id][3]}, {self.items[_id][3]}"
                 for _id in self.items.keys()
             ]
         )

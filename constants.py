@@ -16,7 +16,7 @@ MAIN_MENU = [
     f"6 {NOTIFICATIONS}",
     f"7 {SETTINGS}",
 ]
-
+MAIN_MENU_OPTIONS_LIST = [o.lower().split(' ')[1] for o in MAIN_MENU]
 INVALID_PRODUCT_ID = (
     "Invalid Product ID, Please Choose valid Product ID from above list"
 )
@@ -28,4 +28,8 @@ Please specify your username as following
 login your_user_name
 """
 NO_MORE_ITEMS = 'No more items.'
+PRODUCT_ADDED_TO_CART = """
+Product added to cart.<br><br>
+Type shop for more products.
+"""
 PARDON = "Pardon, Can you be more specific?"

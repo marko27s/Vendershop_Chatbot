@@ -23,10 +23,13 @@ def get_product(product_id) -> str:
     product = Product.query.filter(Product.id == int(product_id)).first()
     if product is None:
         return INVALID_PRODUCT_ID
-    return f"""
+    return (
+        product,
+        f"""
         Product ID: {product.id}<br>
         Product Name: {product.name}<br>
         Description: {product.description}<br>
         Stock: {product.stock}<br>
         Price: ${product.min_threshold_amount}
-    """
+    """,
+    )

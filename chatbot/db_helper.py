@@ -1,21 +1,21 @@
-from constants import *
 from vendorshop.product.models import Product
+
+from constants import *
 
 
 def get_products(page, option) -> str:
 
-    if option == 'next':
+    if option == "next":
         page += 1
-    elif option == 'back':
+    elif option == "back":
         page -= 1
-    
-    if page < 1: page = 1
+
+    if page < 1:
+        page = 1
     products = Product.query.paginate(page=page, error_out=False, per_page=3).items
-    products_list = [
-        f"{p.id} - {p.name} - ${p.min_threshold_amount}" for p in products
-    ]
+    products_list = [f"{p.id} - {p.name} - ${p.min_threshold_amount}" for p in products]
     if len(products_list) == 0:
-        return get_products(page, 'back') + "<br>"
+        return get_products(page, "back") + "<br>"
     return page, "<br>".join(products_list + [SELECT_MESSAGE_BY_ID, PAGINATION])
 
 

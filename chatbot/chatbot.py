@@ -1,6 +1,7 @@
-from constants import *
 from vendorshop.product.models import Product
+
 from chatbot.db_helper import *
+from constants import *
 
 
 class ChatBot:
@@ -37,7 +38,7 @@ class ChatBot:
         elif message.startswith(SHOP.lower()):
             self.state = SHOP
             return self.get_home_response(2)
-        
+
         return PARDON
 
     def get_home_response(self, option) -> str:
@@ -47,7 +48,7 @@ class ChatBot:
         elif option == 2:
             # return products
             self.page = 1
-            self.page, self.last_message = get_products(self.page, '')
+            self.page, self.last_message = get_products(self.page, "")
             self.state = SHOP
         else:
             return PARDON

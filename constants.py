@@ -16,7 +16,7 @@ MAIN_MENU = [
     f"6 {NOTIFICATIONS}",
     f"7 {SETTINGS}",
 ]
-MAIN_MENU_OPTIONS_LIST = [o.lower().split(' ')[1] for o in MAIN_MENU]
+MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
 INVALID_PRODUCT_ID = (
     "Invalid Product ID, Please Choose valid Product ID from above list"
 )
@@ -27,9 +27,32 @@ REQUEST_TO_LOGIN = """
 Please specify your username as following
 login your_user_name
 """
-NO_MORE_ITEMS = 'No more items.'
+NO_MORE_ITEMS = "Cart is empty.<br>Type shop for more products."
+STOCK_UNAILABLE = "Requested quantity not available, Please choose another quantity.<br><br>"
+NO_ITEMS_IN_CART = "Cart is empty, Type shop for the products."
+ADD_TO_CART = """
+<br><br>
+To add this product to the cart type following.<br>
+add quantity<br>
+e.g add 2
+"""
+REMOVE_FROM_CART = """
+<br><br>
+Type remove with product ID for removing item from cart.<br>
+e.g remove 2
+"""
 PRODUCT_ADDED_TO_CART = """
 Product added to cart.<br><br>
 Type shop for more products.
+"""
+UPDATE_PRODUCT_IN_CART = """
+<br><br>
+For updating item quantity type following<br>
+update product_id new_quantity<br>
+e.g update 2 3
+"""
+PRODUCT_UPDATED = """
+<br>
+Product updated in cart.<br><br>
 """
 PARDON = "Pardon, Can you be more specific?"

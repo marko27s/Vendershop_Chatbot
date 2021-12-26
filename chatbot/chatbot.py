@@ -19,43 +19,53 @@ class ChatBot:
         self.page = 1
 
     def get_response(self, message) -> str:
+        try:
+            if message in MAIN_MENU_OPTIONS_LIST:
+                option_id = MAIN_MENU_OPTIONS_LIST.index(message.split(" ")[0]) + 1
+                return self.get_home_response(option_id)
 
-        if message in MAIN_MENU_OPTIONS_LIST:
-            option_id = MAIN_MENU_OPTIONS_LIST.index(message.split(" ")[0]) + 1
-            return self.get_home_response(option_id)
+            if message.strip().isnumeric():
+                option = int(message.strip())
+                if self.state == HOME:
+                    self.set_state_home()
+                    return self.get_home_response(option)
 
-        if message.strip().isnumeric():
-            option = int(message.strip())
-            if self.state == HOME:
-                self.set_state_home()
-                return self.get_home_response(option)
+                if self.state == SHOP:
+                    return self.get_shop_response(option)
 
-            if self.state == SHOP:
-                return self.get_shop_response(option)
+            elif message.startswith("add"):
+                if self.state == PRODUCT_DETAILS:
+                    quantity = int(message.split(" ")[-1])
+                    return self.cart.add_product(self.last_viewed_product, quantity)
 
-        elif message.startswith("add"):
-            if self.state == PRODUCT_DETAILS:
-                quantity = int(message.split(" ")[-1])
-                self.cart.add_product(self.last_viewed_product, quantity)
-                return PRODUCT_ADDED_TO_CART
-        
-        elif message.startswith("remove"):
-            if self.state == CART:
-                product_id = int(message.split(" ")[-1])
-                self.cart.remove_product(product_id)
+            elif message.startswith("remove"):
+                if self.state == CART:
+                    product_id = int(message.split(" ")[-1])
+                    self.cart.remove_product(product_id)
+                    return self.get_home_response(4)
+
+            elif message.startswith("update"):
+                if self.state == CART:
+                    message_args = message.split(" ")
+                    product_id = int(message_args[1])
+                    quantity = int(message_args[2])
+                    return self.cart.update_product(
+                        product_id, quantity
+                    ) + self.get_home_response(4)
+
+            # pagination input
+            elif message.strip() in ["next", "back"]:
+                if self.state == SHOP:
+                    return self.get_paginated_response(message)
+
+            elif message.strip() == "test":
                 return self.cart.get_cart_items()
-
-        # pagination input
-        elif message.strip() in ["next", "back"]:
-            if self.state == SHOP:
-                return self.get_paginated_response(message)
-
-        elif message.strip() == "test":
-            return self.cart.get_cart_items()
-
+        except:
+            pass
         return PARDON
 
     def get_home_response(self, option) -> str:
+
         if option == 1:
             self.state = HOME
             self.last_message = "<br>".join(MAIN_MENU + [SELECT_MESSAGE])
@@ -69,8 +79,11 @@ class ChatBot:
         elif option == 4:
             # return cart items
             self.state = CART
-            return self.cart.get_cart_items()
-       
+            self.last_message = self.cart.get_cart_items()
+            if self.last_message.strip() == "":
+                return NO_MORE_ITEMS
+            return self.last_message + REMOVE_FROM_CART + UPDATE_PRODUCT_IN_CART
+
         else:
             return PARDON
 

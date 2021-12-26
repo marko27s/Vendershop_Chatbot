@@ -31,5 +31,6 @@ def get_product(product_id) -> str:
         Description: {product.description}<br>
         Stock: {product.stock}<br>
         Price: ${product.min_threshold_amount}
-    """,
+    """
+        + ADD_TO_CART,
     )

@@ -6,6 +6,11 @@ CART = "CART"
 CHECKOUT = "CHECKOUT"
 NOTIFICATIONS = "NOTIFICATIONS"
 SETTINGS = "SETTINGS"
+SHIPPING_ADDRESS = 'SHIPPING_ADDRESS'
+SHIPPING_METHOD = 'SHIPPING_METHOD'
+SHIPPING_METHOD_SET = 'SHIPPING_METHOD_SET'
+PAYMENT_METHOD = 'PAYMENT_METHOD'
+REFUND_ADDRESS = 'REFUND_ADDRESS'
 
 MAIN_MENU = [
     f"1 {HOME}",
@@ -17,9 +22,11 @@ MAIN_MENU = [
     f"7 {SETTINGS}",
 ]
 MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
+
 INVALID_PRODUCT_ID = (
     "Invalid Product ID, Please Choose valid Product ID from above list"
 )
+INVALID_ID = "Invalid ID, Please Choose valid ID from above list"
 SELECT_MESSAGE = "Please type any number or the option name from above list"
 PAGINATION = "Type next for more or back"
 SELECT_MESSAGE_BY_ID = "Please type number from above list to view details"
@@ -54,5 +61,9 @@ e.g update 2 3
 PRODUCT_UPDATED = """
 <br>
 Product updated in cart.<br><br>
+"""
+PROCEED = """
+<br><br>
+Type next to proceed.
 """
 PARDON = "Pardon, Can you be more specific?"

@@ -12,7 +12,7 @@ class ChatBot:
         self.last_message = ""
         self.page = 1
         self.last_viewed_product = None
-        self.cart = Cart()
+        self.cart = Cart(user.default_shipping_address)
 
     def set_state_home(self) -> None:
         self.state = HOME
@@ -30,7 +30,7 @@ class ChatBot:
                     self.set_state_home()
                     return self.get_home_response(option)
 
-                if self.state == SHOP:
+                elif self.state == SHOP:
                     return self.get_shop_response(option)
 
             elif message.startswith("add"):
@@ -45,6 +45,7 @@ class ChatBot:
                     return self.get_home_response(4)
 
             elif message.startswith("update"):
+                
                 if self.state == CART:
                     message_args = message.split(" ")
                     product_id = int(message_args[1])
@@ -52,12 +53,29 @@ class ChatBot:
                     return self.cart.update_product(
                         product_id, quantity
                     ) + self.get_home_response(4)
+                
+                elif self.state == SHIPPING_ADDRESS:
+                    message_args = message.split(" ")
+                    shipping_address = ' '.join(message_args[1:]).strip()
+                    self.cart.set_shipping_address(shipping_address)
+                    return self.cart.get_shipping_address() 
 
             # pagination input
             elif message.strip() in ["next", "back"]:
+                
                 if self.state == SHOP:
                     return self.get_paginated_response(message)
-
+                
+                elif self.state == CHECKOUT:
+                    # ask for shipping method
+                    self.state = SHIPPING_ADDRESS
+                    return f"""
+                    Your Shipping Address: {self.cart.shiiping_address}<br>
+                    Type update new_shipping_address
+                    """ + PROCEED
+                
+                else:
+                    pass
             elif message.strip() == "test":
                 return self.cart.get_cart_items()
         except:
@@ -83,6 +101,11 @@ class ChatBot:
             if self.last_message.strip() == "":
                 return NO_MORE_ITEMS
             return self.last_message + REMOVE_FROM_CART + UPDATE_PRODUCT_IN_CART
+
+        elif option == 5:
+            # Checkout
+            self.state = CHECKOUT
+            return self.cart.get_cart_items() + self.cart.get_total_cost() + PROCEED
 
         else:
             return PARDON

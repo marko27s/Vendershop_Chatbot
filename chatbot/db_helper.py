@@ -1,4 +1,5 @@
 from vendorshop.product.models import Product
+from vendorshop.order.models import ShippingMethod
 
 from constants import *
 

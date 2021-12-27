@@ -23,7 +23,7 @@ class ChatBot:
             if message in MAIN_MENU_OPTIONS_LIST:
                 option_id = MAIN_MENU_OPTIONS_LIST.index(message.split(" ")[0]) + 1
                 return self.get_home_response(option_id)
-            
+
             if message.strip().isnumeric():
                 option = int(message.strip())
                 if self.state == HOME:
@@ -49,7 +49,6 @@ class ChatBot:
                 else:
                     pass
 
-
             elif message.startswith("add"):
                 if self.state == PRODUCT_DETAILS:
                     quantity = int(message.split(" ")[-1])
@@ -62,7 +61,7 @@ class ChatBot:
                     return self.get_home_response(4)
 
             elif message.startswith("update"):
-                
+
                 if self.state == CART:
                     message_args = message.split(" ")
                     product_id = int(message_args[1])
@@ -70,28 +69,37 @@ class ChatBot:
                     return self.cart.update_product(
                         product_id, quantity
                     ) + self.get_home_response(4)
-                
+
                 elif self.state == SHIPPING_ADDRESS:
                     message_args = message.split(" ")
-                    shipping_address = ' '.join(message_args[1:]).strip()
+                    shipping_address = " ".join(message_args[1:]).strip()
                     self.cart.set_shipping_address(shipping_address)
-                    return self.cart.get_shipping_address() 
+                    return self.cart.get_shipping_address()
 
             # pagination input
             elif message.strip() in ["next", "back"]:
-                
+
                 if self.state == SHOP:
                     return self.get_paginated_response(message)
-                
+
+                elif self.state == ORDERS:
+                    self.page, self.last_message = get_order_by_user(
+                        self.user.id, self.page, message
+                    )
+                    return self.last_message
+
                 elif self.state == CHECKOUT:
                     # ask for shipping method
                     self.state = SHIPPING_ADDRESS
-                    return f"""
+                    return (
+                        f"""
                     Your Shipping Address: {self.cart.shiiping_address}<br>
                     Type update new_shipping_address
-                    """ + PROCEED
+                    """
+                        + PROCEED
+                    )
 
-                elif self.state == SHIPPING_ADDRESS: 
+                elif self.state == SHIPPING_ADDRESS:
                     self.state = SHIPPING_METHOD
                     return get_shipping_methods()
 
@@ -102,9 +110,8 @@ class ChatBot:
                 elif self.state == PAYMENT_METHOD_SET:
                     self.state = REFUND_ADDRESS
                     return INPUT_REFUND_ADDRESS
-                
+
                 elif self.state == REFUND_ADDRESS_SET:
-                    print('Im here')
                     # Create order here
                     return self.cart.create_order(self.user)
 
@@ -131,6 +138,11 @@ class ChatBot:
             self.page = 1
             self.page, self.last_message = get_products(self.page, "")
             self.state = SHOP
+
+        elif option == 3:
+            self.page = 1
+            self.state = ORDERS
+            return get_order_by_user(self.user.id, self.page, option)
 
         elif option == 4:
             # return cart items

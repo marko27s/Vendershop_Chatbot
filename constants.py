@@ -6,13 +6,13 @@ CART = "CART"
 CHECKOUT = "CHECKOUT"
 NOTIFICATIONS = "NOTIFICATIONS"
 SETTINGS = "SETTINGS"
-SHIPPING_ADDRESS = 'SHIPPING_ADDRESS'
-SHIPPING_METHOD = 'SHIPPING_METHOD'
-SHIPPING_METHOD_SET = 'SHIPPING_METHOD_SET'
-PAYMENT_METHOD = 'PAYMENT_METHOD'
-PAYMENT_METHOD_SET = 'PAYMENT_METHOD_SET'
-REFUND_ADDRESS = 'REFUND_ADDRESS'
-REFUND_ADDRESS_SET = 'REFUND_ADDRESS_SET'
+SHIPPING_ADDRESS = "SHIPPING_ADDRESS"
+SHIPPING_METHOD = "SHIPPING_METHOD"
+SHIPPING_METHOD_SET = "SHIPPING_METHOD_SET"
+PAYMENT_METHOD = "PAYMENT_METHOD"
+PAYMENT_METHOD_SET = "PAYMENT_METHOD_SET"
+REFUND_ADDRESS = "REFUND_ADDRESS"
+REFUND_ADDRESS_SET = "REFUND_ADDRESS_SET"
 
 MAIN_MENU = [
     f"1 {HOME}",
@@ -26,18 +26,9 @@ MAIN_MENU = [
 MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
 
 PAYMENT_METHODS = {
-    1: {
-        'name': 'Bitcoin',
-        'value': 'btc'
-    },
-    2: {
-        'name': 'Paypal',
-        'value' : 'paypal'
-    },
-    3: {
-        'name': 'Monero',
-        'value': 'xmr'
-    }
+    1: {"name": "Bitcoin", "value": "btc"},
+    2: {"name": "Paypal", "value": "paypal"},
+    3: {"name": "Monero", "value": "xmr"},
 }
 
 INVALID_PRODUCT_ID = (
@@ -52,7 +43,9 @@ Please specify your username as following
 login your_user_name
 """
 NO_MORE_ITEMS = "Cart is empty.<br>Type shop for more products."
-STOCK_UNAILABLE = "Requested quantity not available, Please choose another quantity.<br><br>"
+STOCK_UNAILABLE = (
+    "Requested quantity not available, Please choose another quantity.<br><br>"
+)
 NO_ITEMS_IN_CART = "Cart is empty, Type shop for the products."
 ADD_TO_CART = """
 <br><br>

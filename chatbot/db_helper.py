@@ -35,3 +35,28 @@ def get_product(product_id) -> str:
     """
         + ADD_TO_CART,
     )
+
+
+def get_shipping_methods():
+    shipping_methods = ShippingMethod.query.all()
+    return '<br>'.join([
+        f"{shipping_method.id} - {shipping_method.name}, Weight: {shipping_method.weight}, Price: {shipping_method.price}"
+        for shipping_method in shipping_methods
+    ]) + """
+    <br>
+    Select from above shipping methods using its ID.
+    """
+
+
+def get_shipping_method(shipping_method_id):
+    return ShippingMethod.query.filter(ShippingMethod.id == shipping_method_id).first()
+
+
+def get_payment_methods():
+    return '<br>'.join([
+        f"{_id} - {PAYMENT_METHODS[_id]['name']}"
+        for _id in PAYMENT_METHODS.keys()
+    ]) + """
+    <br>
+    Select from above payment methods using its ID.
+    """

@@ -10,7 +10,9 @@ SHIPPING_ADDRESS = 'SHIPPING_ADDRESS'
 SHIPPING_METHOD = 'SHIPPING_METHOD'
 SHIPPING_METHOD_SET = 'SHIPPING_METHOD_SET'
 PAYMENT_METHOD = 'PAYMENT_METHOD'
+PAYMENT_METHOD_SET = 'PAYMENT_METHOD_SET'
 REFUND_ADDRESS = 'REFUND_ADDRESS'
+REFUND_ADDRESS_SET = 'REFUND_ADDRESS_SET'
 
 MAIN_MENU = [
     f"1 {HOME}",
@@ -22,6 +24,21 @@ MAIN_MENU = [
     f"7 {SETTINGS}",
 ]
 MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
+
+PAYMENT_METHODS = {
+    1: {
+        'name': 'Bitcoin',
+        'value': 'btc'
+    },
+    2: {
+        'name': 'Paypal',
+        'value' : 'paypal'
+    },
+    3: {
+        'name': 'Monero',
+        'value': 'xmr'
+    }
+}
 
 INVALID_PRODUCT_ID = (
     "Invalid Product ID, Please Choose valid Product ID from above list"
@@ -65,5 +82,11 @@ Product updated in cart.<br><br>
 PROCEED = """
 <br><br>
 Type next to proceed.
+"""
+INPUT_REFUND_ADDRESS = """
+Please enter your Refund Address.<br>
+"""
+REFUND_ADDRESS_SET_AKW = """
+Refund Address has been set.
 """
 PARDON = "Pardon, Can you be more specific?"

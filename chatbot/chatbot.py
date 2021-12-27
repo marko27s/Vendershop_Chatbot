@@ -23,7 +23,7 @@ class ChatBot:
             if message in MAIN_MENU_OPTIONS_LIST:
                 option_id = MAIN_MENU_OPTIONS_LIST.index(message.split(" ")[0]) + 1
                 return self.get_home_response(option_id)
-
+            
             if message.strip().isnumeric():
                 option = int(message.strip())
                 if self.state == HOME:
@@ -32,6 +32,23 @@ class ChatBot:
 
                 elif self.state == SHOP:
                     return self.get_shop_response(option)
+
+                elif self.state == SHIPPING_METHOD:
+                    self.last_message = self.cart.set_shipping_method(option)
+                    if self.last_message == INVALID_ID:
+                        return INVALID_ID
+                    self.state = SHIPPING_METHOD_SET
+                    return self.last_message
+
+                elif self.state == PAYMENT_METHOD:
+                    self.last_message = self.cart.set_payment_method(option)
+                    if self.last_message == INVALID_ID:
+                        return INVALID_ID
+                    self.state = PAYMENT_METHOD_SET
+                    return self.last_message
+                else:
+                    pass
+
 
             elif message.startswith("add"):
                 if self.state == PRODUCT_DETAILS:
@@ -73,13 +90,34 @@ class ChatBot:
                     Your Shipping Address: {self.cart.shiiping_address}<br>
                     Type update new_shipping_address
                     """ + PROCEED
+
+                elif self.state == SHIPPING_ADDRESS: 
+                    self.state = SHIPPING_METHOD
+                    return get_shipping_methods()
+
+                elif self.state == SHIPPING_METHOD_SET:
+                    self.state = PAYMENT_METHOD
+                    return get_payment_methods()
+
+                elif self.state == PAYMENT_METHOD_SET:
+                    self.state = REFUND_ADDRESS
+                    return INPUT_REFUND_ADDRESS
                 
+                elif self.state == REFUND_ADDRESS_SET:
+                    print('Im here')
+                    # Create order here
+                    return self.cart.create_order(self.user)
+
                 else:
                     pass
+            elif len(message) > 5:
+                if self.state == REFUND_ADDRESS:
+                    self.state = REFUND_ADDRESS_SET
+                    return self.cart.set_refund_address(message.strip())
             elif message.strip() == "test":
                 return self.cart.get_cart_items()
-        except:
-            pass
+        except Exception as e:
+            print(e)
         return PARDON
 
     def get_home_response(self, option) -> str:

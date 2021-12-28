@@ -1,3 +1,4 @@
+from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.product.models import Product
 
@@ -35,6 +36,12 @@ def get_product(product_id) -> str:
     """
         + ADD_TO_CART,
     )
+
+
+def subtract_product(product_id, quantity):
+    product = Product.query.filter(Product.id == int(product_id)).first()
+    product.stock -= quantity
+    db.session.commit()
 
 
 def get_order_by_user(user_id, page, option):

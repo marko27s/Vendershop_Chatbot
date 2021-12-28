@@ -154,6 +154,8 @@ class ChatBot:
 
         elif option == 5:
             # Checkout
+            if self.cart.total_cost() < MINIMUM_ORDER_VALUE:
+                return self.cart.get_cart_items() + MINIMUM_ORDER_VALUE_ERROR
             self.state = CHECKOUT
             return self.cart.get_cart_items() + self.cart.get_total_cost() + PROCEED
 

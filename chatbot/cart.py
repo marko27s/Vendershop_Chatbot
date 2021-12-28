@@ -1,10 +1,13 @@
+from re import S
+
 from vendorshop.admin.models import convert_price
 from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.payment.models import Payment
 from vendorshop.user.models import User
 
-from chatbot.db_helper import get_product, get_shipping_method
+from chatbot.db_helper import (get_product, get_shipping_method,
+                               subtract_product)
 from constants import *
 
 
@@ -65,7 +68,7 @@ class Cart:
             return INVALID_PRODUCT_ID
 
         if product.stock < quantity:
-            return STOCK_UNAILABLE
+            return STOCK_NOT_AVAILABLE.format(product.name)
 
         self.items[product.id] = [
             product.name,
@@ -105,7 +108,12 @@ class Cart:
             + "<br>-----"
         )
 
-    def get_total_cost(self):
+    def total_cost(self) -> float:
+        return sum(
+            [self.items[_id][2] * self.items[_id][3] for _id in self.items.keys()]
+        )
+
+    def get_total_cost(self) -> str:
         totals = sum(
             [self.items[_id][2] * self.items[_id][3] for _id in self.items.keys()]
         )
@@ -114,12 +122,22 @@ class Cart:
         Total Items Cost: ${totals}
         """
 
-    def create_order(self, user):
+    def create_order(self, user) -> str:
+
+        # If cart's total does not meet minimum requirements
+        if self.total_cost() < MINIMUM_ORDER_VALUE:
+            return MINIMUM_ORDER_VALUE_ERROR
+
         user = User.query.filter(User.id == user.id).first()
         # creste items list
+
         product_items = []
         for product_id in self.items.keys():
             p, _ = get_product(product_id)
+
+            # check stocks
+            if self.items[product_id][3] > p.stock:
+                return STOCK_NOT_AVAILABLE.format(p.name)
             product_items.append(OrderItem(product=p, amount=self.items[product_id][3]))
         order = Order()
         order.items = product_items
@@ -134,12 +152,17 @@ class Cart:
             order.total,
             order.payment.currency,
         )
-
         user.orders.append(order)
         user.commit()
-        
+
+        # subtract stock from products
+        for product_id in self.items.keys():
+            p, _ = get_product(product_id)
+            subtract_product(product_id, self.items[product_id][3])
+
+        # emptying the cart after order is successfully created
         self.items = {}
-        
+
         return """
         Order Created!
         """

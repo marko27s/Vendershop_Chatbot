@@ -1,3 +1,7 @@
+import os
+
+
+MINIMUM_ORDER_VALUE = os.getenv('MINIMUM_ORDER_VALUE', 10)
 HOME = "HOME"
 SHOP = "SHOP"
 PRODUCT_DETAILS = "PRODUCT DETAILS"
@@ -82,4 +86,13 @@ Please enter your Refund Address.<br>
 REFUND_ADDRESS_SET_AKW = """
 Refund Address has been set.
 """
+STOCK_NOT_AVAILABLE = """
+Stock not available for product {}<br>
+Please input another quantity.<br>
+"""
+MINIMUM_ORDER_VALUE_ERROR = """
+<br><br>
+Total cost of the items in the cart does not meet the minimum requirements.
+Minimum order value is ${}. Please add more items to the cart.<br>
+""".format(MINIMUM_ORDER_VALUE)
 PARDON = "Pardon, Can you be more specific?"

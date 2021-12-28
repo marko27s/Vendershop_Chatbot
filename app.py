@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask, jsonify, redirect, render_template, request, session
 from vendorshop import create_app
 from vendorshop.extensions import db
@@ -12,7 +13,7 @@ create_app().app_context().push()
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = os.getenv("SESSION_TYPE", "filesystem")
 Session(app)
 
 

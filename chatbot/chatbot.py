@@ -32,7 +32,7 @@ class ChatBot:
 
                 elif self.state == SHOP:
                     return self.get_shop_response(option)
-
+                
                 elif self.state == SHIPPING_METHOD:
                     self.last_message = self.cart.set_shipping_method(option)
                     if self.last_message == INVALID_ID:
@@ -46,6 +46,10 @@ class ChatBot:
                         return INVALID_ID
                     self.state = PAYMENT_METHOD_SET
                     return self.last_message
+
+                elif self.state == ORDERS:
+                    self.state = ORDER_DETAILS
+                    return get_order_by_id(option, self.user.id)
                 else:
                     pass
 
@@ -142,7 +146,8 @@ class ChatBot:
         elif option == 3:
             self.page = 1
             self.state = ORDERS
-            return get_order_by_user(self.user.id, self.page, option)
+            self.page, self.last_message = get_order_by_user(self.user.id, self.page, option)
+            return self.last_message
 
         elif option == 4:
             # return cart items

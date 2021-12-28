@@ -1,5 +1,3 @@
-from re import S
-
 from vendorshop.admin.models import convert_price
 from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod

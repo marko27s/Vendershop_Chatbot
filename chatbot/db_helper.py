@@ -44,7 +44,35 @@ def subtract_product(product_id, quantity):
     db.session.commit()
 
 
+def get_order_by_id(order_id, user_id):
+    
+    order = Order.query.filter(
+        Order.id == order_id,
+        Order.user_id == user_id
+    ).first()
+    
+    if order is None:
+        return INVALID_ID
+    
+    return f"""
+    <br><br>
+    Order ID: {order.id}<br>
+    Status: {order.status}<br>
+    Date: {order.created_at}<br>
+    <br>
+    Items:
+    <br>
+    {'<br>'.join([
+        f"{_id+1} - {item.product.name}, Quantity: {item.amount}"
+        for _id, item in enumerate(order.items)
+    ])}
+    <br><br>
+    Total Price: ${order.total}
+    """
+
+
 def get_order_by_user(user_id, page, option):
+    
     if option == "next":
         page += 1
     elif option == "back":
@@ -67,15 +95,13 @@ def get_order_by_user(user_id, page, option):
         <br><br>
         Order ID: {order.id}, Status: {order.status}
         <br>
-        Items:
-        <br>
-        {'<br>'.join([
-            f"{_id+1} - {item.product.name}, Quantity: {item.amount}"
-            for _id, item in enumerate(order.items)
-        ])}
-        <br>
         Total Price: ${order.total}
         """
+    response += """
+    <br><br>
+    Type Order ID for details.<br>
+    Type next for more orders<br>
+    """
     return page, response
 
 

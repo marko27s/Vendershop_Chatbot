@@ -137,6 +137,9 @@ class Cart:
 
         user.orders.append(order)
         user.commit()
+        
+        self.items = {}
+        
         return """
         Order Created!
         """

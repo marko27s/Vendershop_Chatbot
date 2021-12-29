@@ -4,8 +4,8 @@ from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.payment.models import Payment
 from vendorshop.user.models import User
 
-from chatbot.db_helper import (get_product, get_shipping_method,
-                               subtract_product)
+from chatbot.db_helper import (create_notifications_for_seller, get_product,
+                               get_shipping_method, subtract_product)
 from constants import *
 
 
@@ -157,6 +157,13 @@ class Cart:
         for product_id in self.items.keys():
             p, _ = get_product(product_id)
             subtract_product(product_id, self.items[product_id][3])
+
+        for item in order.items:
+            try:
+                # Creating a notification for the seller for the Order
+                create_notifications_for_seller(user, item)
+            except:
+                pass
 
         # emptying the cart after order is successfully created
         self.items = {}

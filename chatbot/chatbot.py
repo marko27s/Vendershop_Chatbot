@@ -1,3 +1,4 @@
+from vendorshop.admin.models import Notification
 from vendorshop.product.models import Product
 
 from chatbot.cart import Cart
@@ -32,7 +33,7 @@ class ChatBot:
 
                 elif self.state == SHOP:
                     return self.get_shop_response(option)
-                
+
                 elif self.state == SHIPPING_METHOD:
                     self.last_message = self.cart.set_shipping_method(option)
                     if self.last_message == INVALID_ID:
@@ -146,7 +147,9 @@ class ChatBot:
         elif option == 3:
             self.page = 1
             self.state = ORDERS
-            self.page, self.last_message = get_order_by_user(self.user.id, self.page, option)
+            self.page, self.last_message = get_order_by_user(
+                self.user.id, self.page, option
+            )
             return self.last_message
 
         elif option == 4:

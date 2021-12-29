@@ -1,3 +1,4 @@
+from vendorshop.admin.models import Notification
 from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.product.models import Product
@@ -45,15 +46,12 @@ def subtract_product(product_id, quantity):
 
 
 def get_order_by_id(order_id, user_id):
-    
-    order = Order.query.filter(
-        Order.id == order_id,
-        Order.user_id == user_id
-    ).first()
-    
+
+    order = Order.query.filter(Order.id == order_id, Order.user_id == user_id).first()
+
     if order is None:
         return INVALID_ID
-    
+
     return f"""
     <br><br>
     Order ID: {order.id}<br>
@@ -72,7 +70,7 @@ def get_order_by_id(order_id, user_id):
 
 
 def get_order_by_user(user_id, page, option):
-    
+
     if option == "next":
         page += 1
     elif option == "back":
@@ -138,3 +136,13 @@ def get_payment_methods():
     Select from above payment methods using its ID.
     """
     )
+
+
+def create_notifications_for_seller(user, order_item):
+
+    notification = Notification(
+        text=f"{user.username} placed an order, ORDER # {order_item.order.id}",
+        link=f"{WEB_UI_BASE_URL}order/{order_item.order.id}",
+        user=order_item.product.user,
+    )
+    notification.save()

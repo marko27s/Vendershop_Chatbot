@@ -2,6 +2,7 @@ from vendorshop.admin.models import Notification
 from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.product.models import Product
+from vendorshop.payment.models import Payment
 
 from constants import *
 
@@ -43,6 +44,10 @@ def subtract_product(product_id, quantity):
     product = Product.query.filter(Product.id == int(product_id)).first()
     product.stock -= quantity
     db.session.commit()
+
+
+def get_payment_details():
+    pass
 
 
 def get_order_by_id(order_id, user_id):

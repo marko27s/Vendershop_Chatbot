@@ -118,6 +118,7 @@ class ChatBot:
 
                 elif self.state == REFUND_ADDRESS_SET:
                     # Create order here
+                    self.state = ORDER_CREATED
                     return self.cart.create_order(self.user)
 
                 else:

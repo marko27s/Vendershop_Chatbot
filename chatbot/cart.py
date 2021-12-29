@@ -168,6 +168,14 @@ class Cart:
         # emptying the cart after order is successfully created
         self.items = {}
 
-        return """
-        Order Created!
+        return f"""
+        Order Created! # {order.id}<br><br>
+        Payment Details<br>
+        Wallet Address<br>
+        {order.payment.address}<br>
+        {PAYMENT_APPEAR_TIME}<br><br>
+        Payment method ({self.payment_method["value"]}): {self.payment_method["name"]}<br>
+        Order Value: {order.payment.amount}<br>
+        Order value (USD): ${order.total}<br>
+        Status: {order.status}<br>
         """

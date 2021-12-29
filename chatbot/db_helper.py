@@ -1,8 +1,8 @@
 from vendorshop.admin.models import Notification
 from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
-from vendorshop.product.models import Product
 from vendorshop.payment.models import Payment
+from vendorshop.product.models import Product
 
 from constants import *
 
@@ -156,3 +156,23 @@ def create_notifications_for_seller(user, order_item):
         user=order_item.product.user,
     )
     notification.save()
+
+
+def get_latest_notifications_for_the_user(user, page, option):
+    if option == "next":
+        page += 1
+    elif option == "back":
+        page -= 1
+
+    if page < 1:
+        page = 1
+    notifications_paginate = (
+        Notification.query.filter(Notification.user_id == user.id)
+        .order_by(Notification.id.desc())
+        .paginate(page=page, error_out=False, per_page=5)
+        .items
+    )
+    notifications = [f"{n.text}" for n in notifications_paginate]
+    if len(notifications) == 0:
+        return get_latest_notifications_for_the_user(user, page, "back")
+    return page, "<br>".join(notifications + [PAGINATION])

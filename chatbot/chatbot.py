@@ -121,6 +121,16 @@ class ChatBot:
                     self.state = ORDER_CREATED
                     return self.cart.create_order(self.user)
 
+                elif self.state == NOTIFICATIONS:
+                    # return paginated notifications
+                    (
+                        self.page,
+                        self.last_message,
+                    ) = get_latest_notifications_for_the_user(
+                        self.user, self.page, message
+                    )
+                    return self.last_message
+
                 else:
                     pass
             elif len(message) > 5:
@@ -167,6 +177,15 @@ class ChatBot:
                 return self.cart.get_cart_items() + MINIMUM_ORDER_VALUE_ERROR
             self.state = CHECKOUT
             return self.cart.get_cart_items() + self.cart.get_total_cost() + PROCEED
+
+        elif option == 6:
+            # Notifications
+            self.state = NOTIFICATIONS
+            self.page = 1
+            self.page, self.last_message = get_latest_notifications_for_the_user(
+                self.user, self.page, option
+            )
+            return self.last_message
 
         else:
             return PARDON

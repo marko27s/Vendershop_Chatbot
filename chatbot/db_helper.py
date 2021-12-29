@@ -70,7 +70,12 @@ def get_order_by_id(order_id, user_id):
         for _id, item in enumerate(order.items)
     ])}
     <br><br>
-    Total Price: ${order.total}
+    Total Price in USD: ${order.total}<br><br>
+    Wallet Address<br>
+    {order.payment.address}<br>
+    {PAYMENT_APPEAR_TIME}<br><br>
+    Payment method: {order.payment.currency}<br>
+    Order Value: {order.payment.amount}<br>
     """
 
 

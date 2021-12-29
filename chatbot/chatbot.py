@@ -131,6 +131,17 @@ class ChatBot:
                     )
                     return self.last_message
 
+                elif self.state == PRODUCT_DETAILS:
+                    if message == "next":
+                        return PARDON
+                    else:
+                        return self.get_home_response(2)
+                
+                elif self.state == ORDER_DETAILS:
+                    if message == "next":
+                        return PARDON
+                    else:
+                        return self.get_home_response(3)
                 else:
                     pass
             elif len(message) > 5:

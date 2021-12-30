@@ -10,6 +10,7 @@ ORDERS = "ORDERS"
 ORDER_DETAILS = "ORDER_DETAILS"
 CART = "CART"
 CHECKOUT = "CHECKOUT"
+TICKETS = "TICKETS"
 NOTIFICATIONS = "NOTIFICATIONS"
 SETTINGS = "SETTINGS"
 SHIPPING_ADDRESS = "SHIPPING_ADDRESS"
@@ -29,7 +30,8 @@ MAIN_MENU = [
     f"4 {CART}",
     f"5 {CHECKOUT}",
     f"6 {NOTIFICATIONS}",
-    f"7 {SETTINGS}",
+    f"7 {TICKETS}",
+    f"8 {SETTINGS}",
 ]
 MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
 
@@ -119,4 +121,5 @@ TICKET_CREATED = """
 Ticket created successfully!<br><br>
 Type home to return to main menu.<br>
 """
+TICKET_DETAILS = "TICKET_DETAILS"
 PARDON = "Pardon, Can you be more specific?"

@@ -60,12 +60,17 @@ class ChatBot:
                     # 1 - start ticket flow
                     if option == 1:
                         self.state = CREATE_TICKET
-                        return CREATE_TICKET_CONFIRM
+                        return CREATE_TICKET_CONFIRM.format(self.last_id)
 
                 elif self.state == CREATE_TICKET_CONFIRM:
                     self.state = SELECT_ITEM_ID
                     self.last_id = option
                     return CREATE_TICKET_SUBKECT
+
+                elif self.state == TICKETS:
+                    self.state = TICKET_DETAILS
+                    self.last_id = option
+                    return get_ticket_from_id(self.user.id, option)
                 else:
                     pass
 
@@ -104,6 +109,12 @@ class ChatBot:
 
                 elif self.state == ORDERS:
                     self.page, self.last_message = get_order_by_user(
+                        self.user.id, self.page, message
+                    )
+                    return self.last_message
+
+                elif self.state == TICKETS:
+                    self.page, self.last_message = get_all_tickets_for_the_user(
                         self.user.id, self.page, message
                     )
                     return self.last_message
@@ -234,6 +245,14 @@ class ChatBot:
             )
             return self.last_message
 
+        elif option == 7:
+            # Tickets
+            self.state = TICKETS
+            self.page = 1
+            _, self.last_message = get_all_tickets_for_the_user(
+                self.user.id, self.page, ""
+            )
+            return self.last_message
         else:
             return PARDON
 

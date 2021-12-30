@@ -222,3 +222,42 @@ def create_ticket_for_the_order(user_id, item_id, subject, message):
     user.commit()
 
     return TICKET_CREATED
+
+
+def get_all_tickets_for_the_user(user_id, page, option):
+    if option == "next":
+        page += 1
+    elif option == "back":
+        page -= 1
+
+    if page < 1:
+        page = 1
+
+    tickets_paginate = (
+        Ticket.query.filter(Ticket.user_id == user_id)
+        .order_by(Ticket.id.desc())
+        .paginate(page=page, error_out=False, per_page=3)
+        .items
+    )
+    tickets = [f"{t.id} - {t.subject}" for t in tickets_paginate]
+    if len(tickets) == 0:
+        return get_all_tickets_for_the_user(user_id, page, "back")
+    return page, "<br>".join(tickets + [PAGINATION])
+
+
+def get_ticket_from_id(user_id, ticket_id):
+    ticket = Ticket.query.filter(
+        Ticket.id == ticket_id, Ticket.user_id == user_id
+    ).first()
+
+    if ticket is None:
+        return INVALID_ID
+
+    messages = ""
+    for message in ticket.messages:
+        title = "Seller" if message.admin else "You"
+        messages += f"""
+        {title}: {message.message}<br><br>
+        """
+
+    return messages + "Type any message for the reply.<br>"

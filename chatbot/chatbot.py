@@ -195,6 +195,10 @@ class ChatBot:
                         self.user.id, self.last_id, self.ticket_sub, self.ticket_msg
                     )
 
+                elif self.state == TICKET_DETAILS:
+                    # reply to ticket
+                    return send_message_for_ticket(self.last_id, message)
+
             elif message.strip() == "test":
                 return self.cart.get_cart_items()
         except Exception as e:

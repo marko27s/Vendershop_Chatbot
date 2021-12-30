@@ -261,3 +261,12 @@ def get_ticket_from_id(user_id, ticket_id):
         """
 
     return messages + "Type any message for the reply.<br>"
+
+
+def send_message_for_ticket(ticket_id, message):
+    ticket = Ticket.query.filter(Ticket.id == ticket_id).first()
+    ticket_message = TicketMessage(admin=False, message=message)
+    ticket.messages.append(ticket_message)
+    ticket.commit()
+
+    return "Message Sent!"

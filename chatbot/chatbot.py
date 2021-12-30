@@ -177,7 +177,7 @@ class ChatBot:
                     self.state = CREATE_TICKET_CONFIRM
                     return get_items_by_order_id(self.last_id, self.user.id)
 
-            elif len(message) > 5:
+            elif len(message) > 1:
                 if self.state == REFUND_ADDRESS:
                     self.state = REFUND_ADDRESS_SET
                     return self.cart.set_refund_address(message.strip())

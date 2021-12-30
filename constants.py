@@ -22,7 +22,6 @@ REFUND_ADDRESS_SET = "REFUND_ADDRESS_SET"
 ORDER_CREATED = "ORDER_CREATED"
 PAYMENT_APPEAR_TIME = "It can take up to 1 hour for the payment to be confirmed."
 
-
 MAIN_MENU = [
     f"1 {HOME}",
     f"2 {SHOP}",
@@ -100,4 +99,24 @@ MINIMUM_ORDER_VALUE_ERROR = """
 Total cost of the items in the cart does not meet the minimum requirements.
 Minimum order value is ${}. Please add more items to the cart.<br>
 """.format(MINIMUM_ORDER_VALUE)
+CREATE_TICKET = """
+Type 1 If you want to open a ticket.
+"""
+SELECT_ITEM_ID = """
+Select item No from above list for creating the ticket.
+"""
+CREATE_TICKET_CONFIRM = """
+Do you want to create a ticket for Order ID: {}<br><br>
+Type yes to confirm and no to go back.<br>
+"""
+CREATE_TICKET_SUBKECT = """
+Please enter subject for your ticket.
+"""
+CREATE_TICKET_MESSAGE = """
+Please enter message for the ticket
+"""
+TICKET_CREATED = """
+Ticket created successfully!<br><br>
+Type home to return to main menu.<br>
+"""
 PARDON = "Pardon, Can you be more specific?"

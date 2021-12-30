@@ -3,6 +3,8 @@ from vendorshop.extensions import db
 from vendorshop.order.models import Order, OrderItem, ShippingMethod
 from vendorshop.payment.models import Payment
 from vendorshop.product.models import Product
+from vendorshop.ticket.models import Ticket, TicketMessage
+from vendorshop.user.models import User
 
 from constants import *
 
@@ -57,7 +59,8 @@ def get_order_by_id(order_id, user_id):
     if order is None:
         return INVALID_ID
 
-    return f"""
+    return (
+        f"""
     <br><br>
     Order ID: {order.id}<br>
     Status: {order.status}<br>
@@ -75,8 +78,34 @@ def get_order_by_id(order_id, user_id):
     {order.payment.address}<br>
     {PAYMENT_APPEAR_TIME}<br><br>
     Payment method: {order.payment.currency}<br>
-    Order Value: {order.payment.amount}<br>
+    Order Value: {order.payment.amount}<br><br>
     """
+        + CREATE_TICKET
+    )
+
+
+def get_items_by_order_id(order_id, user_id):
+
+    order = Order.query.filter(Order.id == order_id, Order.user_id == user_id).first()
+
+    if order is None:
+        return INVALID_ID
+
+    return (
+        f"""
+    <br><br>
+    Order ID: {order.id}<br>
+    <br>
+    Items:
+    <br>
+    {'<br>'.join([
+        f"{item.id} - {item.product.name}, Quantity: {item.amount}"
+        for _id, item in enumerate(order.items)
+    ])}
+    <br><br>
+    """
+        + SELECT_ITEM_ID
+    )
 
 
 def get_order_by_user(user_id, page, option):
@@ -176,3 +205,20 @@ def get_latest_notifications_for_the_user(user, page, option):
     if len(notifications) == 0:
         return get_latest_notifications_for_the_user(user, page, "back")
     return page, "<br>".join(notifications + [PAGINATION])
+
+
+def create_ticket_for_the_order(user_id, item_id, subject, message):
+    user = User.query.filter(User.id == user_id).first()
+
+    item = OrderItem.query.filter(OrderItem.id == int(item_id)).first()
+
+    ticket = Ticket(
+        subject=subject, order_id=item.order_id, seller_id=item.product.user_id
+    )
+    ticket.messages.append(
+        TicketMessage(message=message),
+    )
+    user.tickets.append(ticket)
+    user.commit()
+
+    return TICKET_CREATED

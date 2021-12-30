@@ -11,8 +11,11 @@ class ChatBot:
         self.user = user
         self.state = HOME
         self.last_message = ""
+        self.last_id = None
         self.page = 1
         self.last_viewed_product = None
+        self.ticket_sub = ""
+        self.ticket_msg = ""
         self.cart = Cart(user.default_shipping_address)
 
     def set_state_home(self) -> None:
@@ -50,7 +53,19 @@ class ChatBot:
 
                 elif self.state == ORDERS:
                     self.state = ORDER_DETAILS
+                    self.last_id = option
                     return get_order_by_id(option, self.user.id)
+
+                elif self.state == ORDER_DETAILS:
+                    # 1 - start ticket flow
+                    if option == 1:
+                        self.state = CREATE_TICKET
+                        return CREATE_TICKET_CONFIRM
+
+                elif self.state == CREATE_TICKET_CONFIRM:
+                    self.state = SELECT_ITEM_ID
+                    self.last_id = option
+                    return CREATE_TICKET_SUBKECT
                 else:
                     pass
 
@@ -136,7 +151,7 @@ class ChatBot:
                         return PARDON
                     else:
                         return self.get_home_response(2)
-                
+
                 elif self.state == ORDER_DETAILS:
                     if message == "next":
                         return PARDON
@@ -144,10 +159,31 @@ class ChatBot:
                         return self.get_home_response(3)
                 else:
                     pass
+
+            elif message in ["yes"]:
+
+                if self.state == CREATE_TICKET:
+                    self.state = CREATE_TICKET_CONFIRM
+                    return get_items_by_order_id(self.last_id, self.user.id)
+
             elif len(message) > 5:
                 if self.state == REFUND_ADDRESS:
                     self.state = REFUND_ADDRESS_SET
                     return self.cart.set_refund_address(message.strip())
+
+                elif self.state == SELECT_ITEM_ID:
+                    self.state = CREATE_TICKET_SUBKECT
+                    self.ticket_sub = message
+                    return CREATE_TICKET_MESSAGE
+
+                elif self.state == CREATE_TICKET_SUBKECT:
+                    self.state == CREATE_TICKET_CONFIRM
+                    self.ticket_msg = message
+
+                    return create_ticket_for_the_order(
+                        self.user.id, self.last_id, self.ticket_sub, self.ticket_msg
+                    )
+
             elif message.strip() == "test":
                 return self.cart.get_cart_items()
         except Exception as e:

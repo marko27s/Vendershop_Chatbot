@@ -17,6 +17,10 @@ python setup.py sdist
 pip install dist/flask_chatbot_app-1.0.tar.gz
 cd ..
 cd tele_bot
+source .env
 pip install -r requirements.txt 
 flask run --host=0.0.0.0 --port=5004
 ```
+
+## Visit the Chat
+http://localhost:5004/chat

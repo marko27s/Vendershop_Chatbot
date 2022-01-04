@@ -35,9 +35,10 @@ def response():
             if user is not None:
                 print(f"{username}")
                 session["chatbot"] = ChatBot(user)
-                return jsonify(
-                    {"response": f"Welcome {session.get('chatbot').user.username}"}
-                )
+                return jsonify({"response": session.get("chatbot").get_response("1")})
+                # return jsonify(
+                #     {"response": f"Welcome {session.get('chatbot').user.username}"}
+                # )
     else:
         # request user to login via username
         return jsonify({"response": REQUEST_TO_LOGIN})

@@ -33,6 +33,7 @@ MAIN_MENU = [
     f"7 {TICKETS}",
     f"8 {SETTINGS}",
 ]
+
 MAIN_MENU_OPTIONS_LIST = [o.lower().split(" ")[1] for o in MAIN_MENU]
 
 PAYMENT_METHODS = {
@@ -124,4 +125,12 @@ Ticket created successfully!<br><br>
 Type home to return to main menu.<br>
 """
 TICKET_DETAILS = "TICKET_DETAILS"
+MAIN_MENU_STR = "<br>".join(MAIN_MENU + [SELECT_MESSAGE])
 PARDON = "Pardon, Can you be more specific?"
+NEXT = "NEXT"
+BACK = "BACK"
+TEXT = "TEXT"
+ADD = "ADD"
+NEXT_STATE = "NEXT_STATE"
+RESPONSE = "RESPONSE"
+ID = "ID"

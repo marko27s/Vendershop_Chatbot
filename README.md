@@ -9,12 +9,14 @@ python3 -m venv venv3
 cd ..
 git clone https://github.com/devstore055/flask_shop.git
 cd flask_shop
+git checkout dev1
 pip install wheel
-pip install -r reqiurements.txt
+pip install -r requirements.txt 
+source .env
 python setup.py sdist
 pip install dist/flask_chatbot_app-1.0.tar.gz
 cd ..
 cd tele_bot
-pip install -r reqiurements.txt
-python main.py
+pip install -r requirements.txt 
+flask run --host=0.0.0.0 --port=5004
 ```

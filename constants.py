@@ -1,8 +1,8 @@
 import os
 
 
-WEB_UI_BASE_URL = os.getenv('WEB_UI_BASE_URL')
-MINIMUM_ORDER_VALUE = int(os.getenv('MINIMUM_ORDER_VALUE', 10))
+WEB_UI_BASE_URL = os.getenv("WEB_UI_BASE_URL")
+MINIMUM_ORDER_VALUE = int(os.getenv("MINIMUM_ORDER_VALUE", 10))
 HOME = "HOME"
 SHOP = "SHOP"
 PRODUCT_DETAILS = "PRODUCT DETAILS"
@@ -100,7 +100,9 @@ MINIMUM_ORDER_VALUE_ERROR = """
 <br><br>
 Total cost of the items in the cart does not meet the minimum requirements.
 Minimum order value is ${}. Please add more items to the cart.<br>
-""".format(MINIMUM_ORDER_VALUE)
+""".format(
+    MINIMUM_ORDER_VALUE
+)
 CREATE_TICKET = """
 Type 1 If you want to open a ticket.
 """

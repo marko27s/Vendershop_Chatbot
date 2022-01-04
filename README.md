@@ -6,6 +6,7 @@ git clone https://github.com/devstore055/tele_bot.git
 cd tele_bot
 python3 -m venv venv3
 . venv3/bin/activate
+pip install --upgrade pip
 cd ..
 git clone https://github.com/devstore055/flask_shop.git
 cd flask_shop

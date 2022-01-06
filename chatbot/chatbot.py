@@ -3,7 +3,7 @@ import re
 from vendorshop.admin.models import Notification
 from vendorshop.product.models import Product
 
-from chatbot.bot_state import bob_state_graph
+from chatbot.bot_state import bot_state_graph
 from chatbot.cart import Cart
 from chatbot.db_helper import *
 from constants import *
@@ -32,17 +32,17 @@ class ChatBot:
 
             # main menu options have high precedence, regardless of current node
             if self.current_node == HOME or message in MAIN_MENU_OPTIONS_LIST:
-                self.current_node, response = bob_state_graph[HOME][matched_regex][
+                self.current_node, response = bot_state_graph[HOME][matched_regex][
                     "handler"
                 ](message, self.user_state)
             
             # get handler and next node based on current node
             # handler will return response based on the input message
             else:
-                response = bob_state_graph[self.current_node][matched_regex]["handler"](
+                response = bot_state_graph[self.current_node][matched_regex]["handler"](
                     message, self.user_state
                 )
-                self.current_node = bob_state_graph[self.current_node][matched_regex][
+                self.current_node = bot_state_graph[self.current_node][matched_regex][
                     "next_node"
                 ]
 
@@ -58,7 +58,7 @@ class ChatBot:
         if message in MAIN_MENU_OPTIONS_LIST:
             return MessageType.id_regex
 
-        for regex in bob_state_graph[self.current_node].keys():
+        for regex in bot_state_graph[self.current_node].keys():
             _regex = re.compile(r"{}".format(regex.value))
             matched = bool(_regex.match(message))
             if matched:

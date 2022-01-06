@@ -1,7 +1,7 @@
 from chatbot.handlers import *
 from constants import *
 
-bob_state_graph = {
+bot_state_graph = {
     
     HOME: {
         MessageType.id_regex: {

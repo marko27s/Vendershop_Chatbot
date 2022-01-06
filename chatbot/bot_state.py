@@ -1,12 +1,34 @@
-from chatbot.response import *
+from chatbot.handlers import *
 from constants import *
 
-BOT_STATE = {
-    HOME: {ID: {RESPONSE: get_home_response}},
-    SHOP: {
-        ID: {NEXT_STATE: PRODUCT_DETAILS, RESPONSE: get_product_details},
-        NEXT: {NEXT_STATE: SHOP, RESPONSE: get_products},
-        BACK: {NEXT_STATE: SHOP, RESPONSE: get_products},
+bob_state_graph = {
+    
+    HOME: {
+        MessageType.id_regex: {
+            "handler": get_home_response
+        }
     },
-    PRODUCT_DETAILS: {ADD: {NEXT_STATE: ADD_TO_CART}},
+    
+    SHOP: {
+        MessageType.id_regex: {
+            "next_node": PRODUCT_DETAILS, 
+            "handler": get_product_details
+        },
+        MessageType.next_regex: {
+            "next_node": SHOP, 
+            "handler": get_products
+        },
+        MessageType.back_regex: {
+            "next_node": SHOP, 
+            "handler": get_products
+        },
+    },
+    
+    PRODUCT_DETAILS: {
+        MessageType.add_regex: {
+            "next_node": PRODUCT_DETAILS,
+            "handler": add_to_cart
+        }
+     },
+
 }

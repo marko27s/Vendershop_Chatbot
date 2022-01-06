@@ -1,7 +1,9 @@
+import re
+
 from vendorshop.admin.models import Notification
 from vendorshop.product.models import Product
 
-from chatbot.bot_state import BOT_STATE
+from chatbot.bot_state import bob_state_graph
 from chatbot.cart import Cart
 from chatbot.db_helper import *
 from constants import *
@@ -9,55 +11,56 @@ from constants import *
 
 class ChatBot:
     def __init__(self, user) -> None:
-        self.user = user
-        self.state = HOME
-        self.last_message = ""
-        self.last_id = None
-        self.page = 1
-        self.last_viewed_product = None
-        self.ticket_sub = ""
-        self.ticket_msg = ""
-        self.cart = Cart(user.default_shipping_address)
-        self.user_state = {}
 
-    def set_state_home(self) -> None:
-        self.state = HOME
-        self.page = 1
+        # save logged in user
+        self.user = user
+
+        # set default state to home (main menu)
+        self.current_node = HOME
+
+        # for saving messages and responses
+        self.conversation_meta = {}
+
+        # for saving cart and other user related info
+        self.user_state = {"cart": Cart(user.default_shipping_address)}
 
     def get_response(self, message) -> str:
         try:
-            print("message", message)
 
-            # identify input message type
-            message_type, message = self.get_message_type(message)
-            print("tesing", message_type, message)
+            # identify input message regex
+            matched_regex = self.get_matched_regex(message)
 
-            if self.state == HOME:
-                self.state, response = BOT_STATE[self.state][message_type][RESPONSE](
-                    message, self.user_state
-                )
-
+            # main menu options have high precedence, regardless of current node
+            if self.current_node == HOME or message in MAIN_MENU_OPTIONS_LIST:
+                self.current_node, response = bob_state_graph[HOME][matched_regex][
+                    "handler"
+                ](message, self.user_state)
+            # get handler and next node based on current node
+            # handler will return response based on the input message
             else:
-                self.state = BOT_STATE[self.state][message_type][NEXT_STATE]
-                response = BOT_STATE[self.state][message_type][RESPONSE](
+                response = bob_state_graph[self.current_node][matched_regex]["handler"](
                     message, self.user_state
                 )
+                self.current_node = bob_state_graph[self.current_node][matched_regex][
+                    "next_node"
+                ]
 
             return response
-
         except Exception as e:
-            print("ERROR", e)
-        return PARDON
+            return PARDON
 
-    def get_message_type(self, message):
-        if message.isnumeric():
-            return ID, int(message)
-        elif message == "next":
-            return NEXT, message
-        elif message == "back":
-            return BACK, message
-        elif message.startswith("add"):
-            return ADD, message
-        elif message == "hone":
-            return ID, int(message)
-        return "", PARDON
+    def get_matched_regex(self, message):
+        """
+        input: message
+        output: matched regex from available regexes based on current node
+        """
+        if message in MAIN_MENU_OPTIONS_LIST:
+            return MessageType.id_regex
+
+        for regex in bob_state_graph[self.current_node].keys():
+            _regex = re.compile(r"{}".format(regex.value))
+            matched = bool(_regex.match(message))
+            print("Matched", matched, message, regex)
+            if matched:
+                return regex, message
+        return None

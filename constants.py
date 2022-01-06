@@ -1,4 +1,17 @@
 import os
+import enum
+
+
+class MessageType(enum.Enum):
+    """
+    Enums for Regexes
+    """
+
+    id_regex = "\d+"
+    next_regex = "next"
+    back_regex = "back"
+    add_regex = "add \d+"
+    text_regex = "[a-zA-Z0-9]+"
 
 
 WEB_UI_BASE_URL = os.getenv("WEB_UI_BASE_URL")

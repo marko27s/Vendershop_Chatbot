@@ -35,6 +35,7 @@ class ChatBot:
                 self.current_node, response = bob_state_graph[HOME][matched_regex][
                     "handler"
                 ](message, self.user_state)
+            
             # get handler and next node based on current node
             # handler will return response based on the input message
             else:
@@ -60,7 +61,6 @@ class ChatBot:
         for regex in bob_state_graph[self.current_node].keys():
             _regex = re.compile(r"{}".format(regex.value))
             matched = bool(_regex.match(message))
-            print("Matched", matched, message, regex)
             if matched:
                 return regex, message
         return None

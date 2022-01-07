@@ -27,7 +27,9 @@ def response():
     # from chatbot
     if session.get("chatbot") is not None:
         print("In Chatbot")
-        return jsonify({"response": session.get("chatbot").get_response(msg)})
+        return jsonify({
+            "response": session.get("chatbot").get_response(msg.lower().strip())
+        })
     elif msg.startswith("login"):
         username = msg.split(" ")[-1]
         if username != "":

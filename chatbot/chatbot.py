@@ -35,7 +35,7 @@ class ChatBot:
                 self.current_node, response = bot_state_graph[HOME][matched_regex][
                     "handler"
                 ](message, self.user_state)
-            
+
             # get handler and next node based on current node
             # handler will return response based on the input message
             else:
@@ -48,6 +48,7 @@ class ChatBot:
 
             return response
         except Exception as e:
+            print("ERROR", e)
             return PARDON
 
     def get_matched_regex(self, message):
@@ -62,5 +63,6 @@ class ChatBot:
             _regex = re.compile(r"{}".format(regex.value))
             matched = bool(_regex.match(message))
             if matched:
-                return regex, message
+                print("Matched Regex: ", regex)
+                return regex
         return None

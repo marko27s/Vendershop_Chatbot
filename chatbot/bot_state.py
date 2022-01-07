@@ -16,11 +16,11 @@ bot_state_graph = {
         },
         MessageType.next_regex: {
             "next_node": SHOP, 
-            "handler": get_products
+            "handler": get_product_list
         },
         MessageType.back_regex: {
             "next_node": SHOP, 
-            "handler": get_products
+            "handler": get_product_list
         },
     },
     
@@ -30,5 +30,16 @@ bot_state_graph = {
             "handler": add_to_cart
         }
      },
+
+    CART: {
+        MessageType.update_regex: {
+            "next_node": CART,
+            "handler": update_cart_item
+        },
+        MessageType.remove_regex: {
+            "next_node": CART,
+            "handler": remove_cart_item
+        }
+    }
 
 }

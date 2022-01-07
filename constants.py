@@ -11,6 +11,8 @@ class MessageType(enum.Enum):
     next_regex = "next"
     back_regex = "back"
     add_regex = "add \d+"
+    update_regex = "update\s[0-9]+\s[0-9]+$"
+    remove_regex = "remove \d+"
     text_regex = "[a-zA-Z0-9]+"
 
 

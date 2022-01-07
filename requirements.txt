@@ -15,6 +15,7 @@ Flask-HTTPAuth==4.1.0
 Flask-Login==0.5.0
 Flask-Migrate==3.1.0
 Flask-Session==0.3.2
+# https://stackoverflow.com/questions/45274152/flask-sqlalchemy-keyerror-sqlalchemy-track-modifications
 Flask-SQLAlchemy==2.1
 Flask-Uploads==0.2.1
 Flask-WTF==0.14.3

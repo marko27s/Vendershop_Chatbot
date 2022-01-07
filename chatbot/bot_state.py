@@ -55,6 +55,17 @@ bot_state_graph = {
             "next_node": ORDER_DETAILS,
             "handler": get_order_by_id
         }
+    },
+
+    NOTIFICATIONS: {
+        MessageType.next_regex: {
+            "next_node": NOTIFICATIONS,
+            "handler": get_notifications_list
+        },
+        MessageType.back_regex: {
+            "next_node": NOTIFICATIONS,
+            "handler": get_notifications_list
+        }
     }
 
 }

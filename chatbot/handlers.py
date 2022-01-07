@@ -32,6 +32,12 @@ def get_home_response(message, user_state):
         # return cart items
         state = CART
         response = get_cart_items(message, user_state)
+
+    elif message == 6:
+        state = NOTIFICATIONS
+        response = get_notifications_list(
+            message, user_state
+        )
     else:
         response = PARDON
 
@@ -83,4 +89,11 @@ def remove_cart_item(message, user_state):
     product_id = int(message.split(" ")[-1])
     user_state["cart"].remove_product(product_id)
     _, response = get_home_response(4, user_state)
+    return response
+
+
+def get_notifications_list(message, user_state):
+    user_state["page"], response = get_latest_notifications_for_the_user(
+        user_state["user_id"], user_state["page"], message
+    )
     return response

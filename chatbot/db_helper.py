@@ -187,7 +187,7 @@ def create_notifications_for_seller(user, order_item):
     notification.save()
 
 
-def get_latest_notifications_for_the_user(user, page, option):
+def get_latest_notifications_for_the_user(user_id, page, option):
     if option == "next":
         page += 1
     elif option == "back":
@@ -196,14 +196,14 @@ def get_latest_notifications_for_the_user(user, page, option):
     if page < 1:
         page = 1
     notifications_paginate = (
-        Notification.query.filter(Notification.user_id == user.id)
+        Notification.query.filter(Notification.user_id == user_id)
         .order_by(Notification.id.desc())
         .paginate(page=page, error_out=False, per_page=5)
         .items
     )
     notifications = [f"{n.text}" for n in notifications_paginate]
     if len(notifications) == 0:
-        return get_latest_notifications_for_the_user(user, page, "back")
+        return get_latest_notifications_for_the_user(user_id, page, "back")
     return page, "<br>".join(notifications + [PAGINATION])
 
 

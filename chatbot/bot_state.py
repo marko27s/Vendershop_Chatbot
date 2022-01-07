@@ -40,6 +40,21 @@ bot_state_graph = {
             "next_node": CART,
             "handler": remove_cart_item
         }
+    },
+
+    ORDERS: {
+        MessageType.next_regex: {
+            "next_node": ORDERS,
+            "handler": get_order_list
+        },
+        MessageType.back_regex: {
+            "next_node": ORDERS,
+            "handler": get_order_list
+        },
+        MessageType.id_regex: {
+            "next_node": ORDER_DETAILS,
+            "handler": get_order_by_id
+        }
     }
 
 }

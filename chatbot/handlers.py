@@ -22,8 +22,11 @@ def get_home_response(message, user_state):
     elif message == 2:
         # return products
         state = SHOP
-        user_state["page"] = 1
         user_state["page"], response = get_products(user_state["page"], "")
+
+    elif message == 3:
+        state = ORDERS
+        response = get_order_list(message, user_state)
 
     elif message == 4:
         # return cart items
@@ -42,6 +45,13 @@ def get_product_list(message, user_state):
 
 def get_product_details(message, user_state):
     user_state["last_viewed_product"], response = get_product(int(message))
+    return response
+
+
+def get_order_list(message, user_state):
+    user_state["page"], response = get_order_by_user(
+        user_state["user_id"], user_state["page"], message
+    )
     return response
 
 

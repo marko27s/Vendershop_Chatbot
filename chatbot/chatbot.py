@@ -22,7 +22,10 @@ class ChatBot:
         self.conversation_meta = {}
 
         # for saving cart and other user related info
-        self.user_state = {"cart": Cart(user.default_shipping_address)}
+        self.user_state = {
+            "user_id": user.id,
+            "cart": Cart(user.default_shipping_address)
+        }
 
     def get_response(self, message) -> str:
         try:

@@ -24,7 +24,7 @@ class ChatBot:
         # for saving cart and other user related info
         self.user_state = {
             "user_id": user.id,
-            "cart": Cart(user.default_shipping_address)
+            "cart": Cart(user.default_shipping_address),
         }
 
     def get_response(self, message) -> str:
@@ -42,12 +42,15 @@ class ChatBot:
             # get handler and next node based on current node
             # handler will return response based on the input message
             else:
-                response = bot_state_graph[self.current_node][matched_regex]["handler"](
-                    message, self.user_state
-                )
-                self.current_node = bot_state_graph[self.current_node][matched_regex][
-                    "next_node"
-                ]
+                error, response = bot_state_graph[self.current_node][matched_regex][
+                    "handler"
+                ](message, self.user_state)
+                print("Error & Response", error, response)
+                if not error:
+                    print("In not error")
+                    self.current_node = bot_state_graph[self.current_node][
+                        matched_regex
+                    ]["next_node"]
 
             return response
         except Exception as e:

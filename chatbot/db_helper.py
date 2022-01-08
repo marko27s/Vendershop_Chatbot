@@ -54,7 +54,8 @@ def get_payment_details():
 
 def get_order_by_id(order_id, user_id):
 
-    order = Order.query.filter(Order.id == order_id, Order.user_id == user_id).first()
+    order = Order.query.filter(
+        Order.id == int(order_id), Order.user_id == int(user_id)).first()
 
     if order is None:
         return INVALID_ID
@@ -159,7 +160,7 @@ def get_shipping_methods():
 
 
 def get_shipping_method(shipping_method_id):
-    return ShippingMethod.query.filter(ShippingMethod.id == shipping_method_id).first()
+    return ShippingMethod.query.filter(ShippingMethod.id == int(shipping_method_id)).first()
 
 
 def get_payment_methods():

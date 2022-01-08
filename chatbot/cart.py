@@ -29,7 +29,7 @@ class Cart:
         return REFUND_ADDRESS_SET_AKW + PROCEED
 
     def set_payment_method(self, payment_method_id) -> None:
-        self.payment_method = PAYMENT_METHODS.get(payment_method_id)
+        self.payment_method = PAYMENT_METHODS.get(int(payment_method_id))
         if self.payment_method is None:
             return INVALID_ID
         return f"""
@@ -120,15 +120,15 @@ class Cart:
         Total Items Cost: ${totals}
         """
 
-    def create_order(self, user) -> str:
+    def create_order(self, user_id) -> str:
 
         # If cart's total does not meet minimum requirements
         if self.total_cost() < MINIMUM_ORDER_VALUE:
             return MINIMUM_ORDER_VALUE_ERROR
 
-        user = User.query.filter(User.id == user.id).first()
+        user = User.query.filter(User.id == user_id).first()
         # creste items list
-
+        
         product_items = []
         for product_id in self.items.keys():
             p, _ = get_product(product_id)

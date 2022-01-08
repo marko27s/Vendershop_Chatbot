@@ -57,6 +57,42 @@ bot_state_graph = {
         }
     },
 
+    ORDER_DETAILS: {
+        MessageType.id_regex: {
+            "next_node": TICKET_CREATED,
+            "handler": get_create_ticket_confirm_message
+        }
+    },
+
+    TICKET_CREATED: {
+        MessageType.yes_regex: {
+            "next_node": CREATE_TICKET_CONFIRM,
+            "handler": select_item_from_order_items
+        }
+    },
+
+    CREATE_TICKET_CONFIRM: {
+        MessageType.id_regex: {
+            "next_node": GET_TICKET_SUBJECT,
+            "handler": get_ticket_subject_message
+        }
+    },
+
+    GET_TICKET_SUBJECT: {
+        MessageType.text_regex: {
+            "next_node": SET_TICKET_SUBJECT,
+            "handler": set_ticket_subject
+        }
+    },
+    
+
+    SET_TICKET_SUBJECT: {
+        MessageType.text_regex: {
+            "next_node": SET_TICKET_MESSAGE,
+            "handler": set_ticket_message
+        }
+    },
+
     NOTIFICATIONS: {
         MessageType.next_regex: {
             "next_node": NOTIFICATIONS,
@@ -129,5 +165,5 @@ bot_state_graph = {
             "next_node": ORDER_CREATED,
             "handler": create_new_order
         }
-    }
+    },
 }

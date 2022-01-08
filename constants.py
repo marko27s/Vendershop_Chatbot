@@ -13,6 +13,7 @@ class MessageType(enum.Enum):
     add_regex = "add \d+"
     update_regex = "update\s[0-9]+\s[0-9]+$"
     remove_regex = "remove \d+"
+    yes_regex = "yes"
     text_regex = "[a-zA-Z0-9]+"
 
 
@@ -37,6 +38,9 @@ PAYMENT_METHOD_SET = "PAYMENT_METHOD_SET"
 REFUND_ADDRESS = "REFUND_ADDRESS"
 REFUND_ADDRESS_SET = "REFUND_ADDRESS_SET"
 ORDER_CREATED = "ORDER_CREATED"
+GET_TICKET_SUBJECT = "GET_TICKET_SUBJECT"
+SET_TICKET_SUBJECT = "SET_TICKET_SUBJECT"
+SET_TICKET_MESSAGE = "SET_TICKET_MESSAGE"
 PAYMENT_APPEAR_TIME = "It can take up to 1 hour for the payment to be confirmed."
 
 MAIN_MENU = [

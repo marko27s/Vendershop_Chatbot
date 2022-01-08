@@ -173,3 +173,36 @@ def set_refund_address(message, user_state):
 def create_new_order(message, user_state):
     response = user_state["cart"].create_order(user_state["user_id"])
     return False, response
+
+
+def get_create_ticket_confirm_message(message, user_state):
+    return False, CREATE_TICKET_CONFIRM.format(user_state["last_id"])
+
+
+def select_item_from_order_items(message, user_state):
+    response = get_items_by_order_id(
+        user_state["last_id"], user_state["user_id"]
+    )
+    return False, response
+
+
+def get_ticket_subject_message(message, user_state):
+    user_state["item_id"] = message
+    return False, """
+    Please type ticket subject
+    """
+
+
+def set_ticket_subject(message, user_state):
+    user_state["ticket_subject"] = message
+    return False, """
+    Please type ticket message
+    """
+
+
+def set_ticket_message(message, user_state):
+    user_state["ticket_message"] = message
+    response = create_ticket_for_the_order(
+        user_state["user_id"], user_state["item_id"],
+        user_state["ticket_subject"], user_state["ticket_message"])
+    return False, response

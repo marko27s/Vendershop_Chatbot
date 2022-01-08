@@ -55,7 +55,8 @@ def get_payment_details():
 def get_order_by_id(order_id, user_id):
 
     order = Order.query.filter(
-        Order.id == int(order_id), Order.user_id == int(user_id)).first()
+        Order.id == int(order_id), Order.user_id == int(user_id)
+    ).first()
 
     if order is None:
         return INVALID_ID
@@ -160,7 +161,9 @@ def get_shipping_methods():
 
 
 def get_shipping_method(shipping_method_id):
-    return ShippingMethod.query.filter(ShippingMethod.id == int(shipping_method_id)).first()
+    return ShippingMethod.query.filter(
+        ShippingMethod.id == int(shipping_method_id)
+    ).first()
 
 
 def get_payment_methods():
@@ -248,7 +251,7 @@ def get_all_tickets_for_the_user(user_id, page, option):
 
 def get_ticket_from_id(user_id, ticket_id):
     ticket = Ticket.query.filter(
-        Ticket.id == ticket_id, Ticket.user_id == user_id
+        Ticket.id == int(ticket_id), Ticket.user_id == user_id
     ).first()
 
     if ticket is None:
@@ -265,9 +268,8 @@ def get_ticket_from_id(user_id, ticket_id):
 
 
 def send_message_for_ticket(ticket_id, message):
-    ticket = Ticket.query.filter(Ticket.id == ticket_id).first()
+    ticket = Ticket.query.filter(Ticket.id == int(ticket_id)).first()
     ticket_message = TicketMessage(admin=False, message=message)
     ticket.messages.append(ticket_message)
     ticket.commit()
-
     return "Message Sent!"

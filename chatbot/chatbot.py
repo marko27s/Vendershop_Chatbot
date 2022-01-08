@@ -45,16 +45,13 @@ class ChatBot:
                 error, response = bot_state_graph[self.current_node][matched_regex][
                     "handler"
                 ](message, self.user_state)
-                print("Error & Response", error, response)
                 if not error:
-                    print("In not error")
                     self.current_node = bot_state_graph[self.current_node][
                         matched_regex
                     ]["next_node"]
 
             return response
         except Exception as e:
-            print("ERROR", e)
             return PARDON
 
     def get_matched_regex(self, message):
@@ -69,6 +66,5 @@ class ChatBot:
             _regex = re.compile(r"{}".format(regex.value))
             matched = bool(_regex.match(message))
             if matched:
-                print("Matched Regex: ", regex)
                 return regex
         return None

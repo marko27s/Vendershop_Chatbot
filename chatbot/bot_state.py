@@ -84,7 +84,7 @@ bot_state_graph = {
             "handler": set_ticket_subject
         }
     },
-    
+
 
     SET_TICKET_SUBJECT: {
         MessageType.text_regex: {
@@ -166,4 +166,26 @@ bot_state_graph = {
             "handler": create_new_order
         }
     },
+
+    TICKETS: {
+        MessageType.next_regex: {
+            "next_node": TICKETS,
+            "handler": get_tickets_list
+        },
+        MessageType.back_regex: {
+            "next_node": TICKETS,
+            "handler": get_tickets_list
+        },
+        MessageType.id_regex: {
+            "next_node": TICKET_DETAILS,
+            "handler": get_ticket_details
+        }
+    },
+
+    TICKET_DETAILS: {
+        MessageType.text_regex: {
+            "next_node": TICKET_DETAILS,
+            "handler": send_new_message
+        }
+    }
 }

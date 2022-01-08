@@ -40,6 +40,10 @@ def get_home_response(message, user_state):
     elif message == 6:
         state = NOTIFICATIONS
         _, response = get_notifications_list(message, user_state)
+
+    elif message == 7:
+        state = TICKETS
+        _, response = get_tickets_list(message, user_state)
     else:
         state, response = HOME, PARDON
 
@@ -119,7 +123,6 @@ def get_checkout_view(message, user_state):
 
 
 def get_shipping_address_message(message, user_state):
-    print("Im in get_shipping")
     return (
         False,
         """
@@ -180,29 +183,54 @@ def get_create_ticket_confirm_message(message, user_state):
 
 
 def select_item_from_order_items(message, user_state):
-    response = get_items_by_order_id(
-        user_state["last_id"], user_state["user_id"]
-    )
+    response = get_items_by_order_id(user_state["last_id"], user_state["user_id"])
     return False, response
 
 
 def get_ticket_subject_message(message, user_state):
     user_state["item_id"] = message
-    return False, """
+    return (
+        False,
+        """
     Please type ticket subject
-    """
+    """,
+    )
 
 
 def set_ticket_subject(message, user_state):
     user_state["ticket_subject"] = message
-    return False, """
+    return (
+        False,
+        """
     Please type ticket message
-    """
+    """,
+    )
 
 
 def set_ticket_message(message, user_state):
     user_state["ticket_message"] = message
     response = create_ticket_for_the_order(
-        user_state["user_id"], user_state["item_id"],
-        user_state["ticket_subject"], user_state["ticket_message"])
+        user_state["user_id"],
+        user_state["item_id"],
+        user_state["ticket_subject"],
+        user_state["ticket_message"],
+    )
+    return False, response
+
+
+def get_tickets_list(message, user_state):
+    user_state["page"], response = get_all_tickets_for_the_user(
+        user_state["user_id"], user_state["page"], message
+    )
+    return False, response
+
+
+def get_ticket_details(message, user_state):
+    user_state["last_ticket_view_id"] = message
+    response = get_ticket_from_id(user_state["user_id"], message)
+    return False, response
+
+
+def send_new_message(message, user_state):
+    response = send_message_for_ticket(user_state["last_ticket_view_id"], message)
     return False, response

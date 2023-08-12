@@ -2,15 +2,14 @@
 
 ## Installing Dependencies
 ```
-git clone https://github.com/devstore055/tele_bot.git
-cd tele_bot
+git clone 
 python3 -m venv venv3
 . venv3/bin/activate
 pip install --upgrade pip
 cd ..
-git clone https://github.com/devstore055/flask_shop.git
+git clone
 cd flask_shop
-git checkout dev1
+git checkout main
 pip install wheel
 pip install -r requirements.txt 
 source .env
